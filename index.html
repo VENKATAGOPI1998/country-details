@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>country details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+</head>
+
+<body>
+<script>
+var div =document.createElement('div');
+div.setAttribute("class","row");
+div.style.backgroundColor="brown";
+div.style.width = "100%";
+var data = fetch('https://restcountries.eu/rest/v2/all')
+.then(function(result){
+    return result.json()
+})
+.then(function(countries){
+    for(var i in countries){
+
+var column = document.createElement("div");
+column.setAttribute("class","col-md-3 m-6");
+
+var data = document.createElement("div");
+data.setAttribute("class","card");
+data.style.width="250px";
+data.style.marginLeft="55px";
+
+var flag = document.createElement("img")
+flag.setAttribute("class","img");
+flag.setAttribute("src",countries[i].flag);
+
+var box = document.createElement("div");
+box.setAttribute("class","card-body");
+
+var country = document.createElement("h2")
+country.innerHTML = countries[i].name ;
+country.style.textAlign="center";
+
+var region = document.createElement("div");
+region.innerHTML = "Region : " + countries[i].region ;
+region.style.textAlign="center";
+
+
+var capital = document.createElement("div");
+capital.innerHTML = "Capital : " + countries[i].capital ;
+capital.style.textAlign="center";
+
+var population = document.createElement("div");
+population.innerHTML = "Population : " + countries[i].population ;
+population.style.textAlign="center";
+
+var button = document.createElement("button");
+button.setAttribute("class","btn-primary");
+button.style.marginLeft="75px";
+
+var link = "weather("+countries[i].latlng[0]+","+countries[i].latlng[1]+")";
+button.setAttribute("onclick",link);
+button.innerHTML = "Weather" ;
+
+box.append(country,region,capital,population,button)
+data.append(flag,box);
+column.append(data)
+div.append(column);
+}
+});
+function weather(result1,result2){
+    var output = "https://api.openweathermap.org/data/2.5/weather?lat="+result1+"&lon="+result2+"&appid=e20da1eaa286ee1abfb8ed669935bdb8";
+    fetch(output)
+    .then(function(data){
+        return data.json();
+    })
+    .then(function(result){
+        alert("Weather Details: " +JSON.stringify(result.main));
+    })
+}
+document.body.append(div);
+</script>
+</body>
+</html>
